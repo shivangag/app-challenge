@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "app-challenge-bd473"
+  },
+  "targets": {
+    "app-challenge-bd473": {
+      "hosting": {
+        "live": [
+          "app-challenge-bd473"
+        ],
+        "test": [
+          "app-staging-challenge"
+        ]
+      }
+    }
+  }
+}

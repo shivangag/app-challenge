@@ -1,0 +1,4 @@
+# keep an empty folder to use as docker volume mount
+/pgdata/**
+!/pgdata/**/
+!/pgdata/**/.gitkeep
