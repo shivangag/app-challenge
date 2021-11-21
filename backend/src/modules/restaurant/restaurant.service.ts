@@ -1,15 +1,27 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Restaurant } from './restaurant.entity';
 import { RESTAURANT_REPOSITORY } from '../../core/constants';
-import { AppGateway } from '../../app.gateway';
+import { RedisService } from 'nestjs-redis';
+import { SocketGateway } from '../socket/socket.gateway';
+import { SocketService } from '../socket/socket.service';
 
 @Injectable()
 export class RestaurantService {
   constructor(
     @Inject(RESTAURANT_REPOSITORY)
     private readonly restuarantRepository: typeof Restaurant,
-    private gateway:AppGateway
+    private gateway: SocketGateway,
+    private cacheManager: SocketService
   ) {}
+
+
+//   async setSomeValue(KEY , value){
+//     await this.cacheManager.set(KEY , value);
+//  }
+
+// async getSomeValue(KEY){
+//   await this.cacheManager.get(KEY);
+// }
 
   async create(restaurant): Promise<Restaurant> {
     return await this.restuarantRepository.create<Restaurant>(restaurant);
@@ -22,7 +34,7 @@ export class RestaurantService {
   }
 
   async findAll(users): Promise<Restaurant[]> {
-    //this.gateway.connectedSockets
+    
     return await this.restuarantRepository.findAll<Restaurant>(users);
   }
 
