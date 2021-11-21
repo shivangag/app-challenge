@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Restaurant } from './restaurant.entity';
 import { RESTAURANT_REPOSITORY } from '../../core/constants';
-import { AppGateway } from 'src/app.gateway';
+import { AppGateway } from '../../app.gateway';
 
 @Injectable()
 export class RestaurantService {
