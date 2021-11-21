@@ -7,6 +7,7 @@ import { RestaurantModule } from './modules/restaurant/restaurant.module';
 
 import { AuthModule } from './modules/auth/auth.module';
 import { DatabaseModule } from './core/database/database.module';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { DatabaseModule } from './core/database/database.module';
     RestaurantModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppGateway],
 })
 export class AppModule {}
