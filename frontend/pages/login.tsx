@@ -3,6 +3,8 @@ import styles from '../styles/Home.module.css'
 import React, { useState } from 'react'
 import { Snackbar } from '@mui/material'
 import { useRouter } from 'next/router'
+import { analytics } from '../util/firebase'
+import { logEvent } from 'firebase/analytics'
 
 const Login: NextPage = (props: any) => {
     const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -62,8 +64,9 @@ const Login: NextPage = (props: any) => {
             toaster({
                 message: "Login Successfully",
             })
-            localStorage.setItem("accessToken", data.token)
+            localStorage.setItem("accessToken", data.token)  
             window.location.href = "/"
+            logEvent(analytics,'login',{email:_payload.email})
         }
     }
 

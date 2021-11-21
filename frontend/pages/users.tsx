@@ -2,6 +2,8 @@ import { NextPage } from "next"
 import { useEffect, useState } from "react"
 import MaterialTable, { Column } from "material-table"
 import { Snackbar } from "@mui/material"
+import { analytics } from '../util/firebase'
+import { logEvent } from 'firebase/analytics'
 
 const Users: NextPage = () => {
     const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -66,6 +68,7 @@ const Users: NextPage = () => {
                 toaster({
                     message: 'User Created Successfully',
                 })
+                logEvent(analytics,'user_created',_payload)
             })
             .catch(error => console.log(error));
         return status;
@@ -86,6 +89,7 @@ const Users: NextPage = () => {
                 toaster({
                     message: 'User Updated Successfully',
                 })
+                logEvent(analytics,'user_updated',_payload)
             })
             .catch(error => console.log(error));
         return status;
@@ -107,6 +111,7 @@ const Users: NextPage = () => {
                 toaster({
                     message: 'User Deleted Successfully',
                 })
+                logEvent(analytics,'user_deleted',_payload)
             })
             .catch(error => console.log(error));
         return status;
