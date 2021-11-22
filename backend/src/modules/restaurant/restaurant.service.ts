@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Restaurant } from './restaurant.entity';
 import { RESTAURANT_REPOSITORY } from '../../core/constants';
-import { RedisService } from 'nestjs-redis';
 import { SocketGateway } from '../socket/socket.gateway';
 import { SocketService } from '../socket/socket.service';
 
@@ -14,15 +13,6 @@ export class RestaurantService {
     private cacheManager: SocketService
   ) {}
 
-
-//   async setSomeValue(KEY , value){
-//     await this.cacheManager.set(KEY , value);
-//  }
-
-// async getSomeValue(KEY){
-//   await this.cacheManager.get(KEY);
-// }
-
   async create(restaurant): Promise<Restaurant> {
     return await this.restuarantRepository.create<Restaurant>(restaurant);
   }
@@ -34,9 +24,6 @@ export class RestaurantService {
   }
 
   async findAll(users): Promise<Restaurant[]> {
-    console.log("start");
-    console.log(users);
-    console.log("end");
     return await this.restuarantRepository.findAll<Restaurant>(users);
   }
 

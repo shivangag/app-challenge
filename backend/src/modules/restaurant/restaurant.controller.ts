@@ -55,7 +55,6 @@ export class RestaurantController {
   @ApiBearerAuth('Authorization')
   async addRestaurant(@Body(new ValidationPipe()) restaurant: RestaurantDto, @AuthUser() user: any) {
     const data = await this.restaurantService.create(restaurant);
-    console.log(user)
     await this.socketgateway.sendNotification(user.id, data);
     return data;
   }

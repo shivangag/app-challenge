@@ -18,7 +18,3 @@ import { SocketGateway } from './socket.gateway';
   exports:[SocketService, SocketGateway]
 })
 export class SocketModule { }
-
-
-
-//http://app-challenge-redis.n7tg10.0001.euw1.cache.amazonaws.com:6379/
