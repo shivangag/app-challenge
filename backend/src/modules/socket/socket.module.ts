@@ -10,7 +10,7 @@ import { SocketGateway } from './socket.gateway';
     inject: [ConfigService],
     useFactory: async (configService: ConfigService) => ({
       store: redisStore,
-      host: configService.get('localhost'),
+      host: configService.get('app-challenge-redis.n7tg10.0001.euw1.cache.amazonaws.com'),
       port: configService.get('6379'),
     })
   })],
@@ -18,3 +18,7 @@ import { SocketGateway } from './socket.gateway';
   exports:[SocketService, SocketGateway]
 })
 export class SocketModule { }
+
+
+
+//http://app-challenge-redis.n7tg10.0001.euw1.cache.amazonaws.com:6379/

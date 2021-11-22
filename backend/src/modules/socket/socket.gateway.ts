@@ -20,7 +20,10 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
   async handleConnection(client: Socket, ...args: any[]) {
     console.log(client.id);
+    console.log(client);
+    // this.server.emit('Notification', { data: "abcd" });
     client.emit('Notification', { data: "abcd" });
+    return { data: "abcd" };
   }
 
   //redis 127.0.0.1:6379
@@ -38,8 +41,30 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
   async handleMessage(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     const clientDetails = { clientId: client.id, client: client };
     this.connectedSockets.push(clientDetails);
-    await this.cacheManager.set(data.userId, client.id);
+    await this.cacheManager.set(client.id, data.userId);
+    console.log(await this.cacheManager.get(client.id));
+    this.sendNotification("abc", "def");
     client.emit('Notification', { data: "Subscription Added" });
     return { data: "Subscription Added" };
+  }
+
+  async sendNotification(uuid, data) {
+
+    console.log("function called")
+    // connectedSocket = clientID,client
+    // redis = clientid, userId
+    for (let i = 0; i < this.connectedSockets.length; i++) {
+      console.log("in loop");
+      const userID = await this.cacheManager.get(this.connectedSockets[i].clientId);
+      console.log(userID)
+      console.log("uuid ->"+ uuid);
+      console.log(data.dataValues);
+      if (uuid !== userID) {
+        console.log("client info");
+        console.log(this.connectedSockets[i].client);
+        this.connectedSockets[i].client.emit('Notification', { payload: data.dataValues });
+      }
+    }
+    return 1;
   }
 }

@@ -10,8 +10,7 @@ export class SocketService {
     ) { }
 
     async get(key): Promise<any> {
-        //console.log(this.gateway.connectedSockets);
-        //console.log(connectedSockets);
+
         return await this.cache.get(key);
     }
 
@@ -26,4 +25,7 @@ export class SocketService {
     async del(key) {
         await this.cache.del(key);
     }
+
+
+    
 }

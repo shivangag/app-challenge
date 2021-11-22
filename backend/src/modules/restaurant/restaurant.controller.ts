@@ -10,6 +10,9 @@ import {
   NotFoundException,
   UseInterceptors,
   ValidationPipe,
+  Header,
+  Request,
+  createParamDecorator,
 } from '@nestjs/common';
 import { SentryInterceptor } from '../../core/interceptor/sentry.interceptor';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,17 +24,23 @@ import {
 
 import { RestaurantService } from './restaurant.service';
 import { User } from '../../modules/user/user.entity';
+import { SocketGateway } from '../socket/socket.gateway';
+import { AuthUser } from './temp';
+//import { JwtService } from '@nestjs/jwt';
 
 @Controller('restaurant')
 export class RestaurantController {
-  constructor(private restaurantService: RestaurantService) {}
+  constructor(private restaurantService: RestaurantService,
+    private socketgateway: SocketGateway) {}
   @Get('all')
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(SentryInterceptor)
   @ApiResponse({ status: 200, description: 'Get Restaurant List' })
   @ApiBearerAuth('Authorization')
-  async getRestaurants() {
+  async getRestaurants(@AuthUser() user: any) {
+    console.log(user.uuid);
     const data = await this.restaurantService.findAll({ include: User });
+    this.socketgateway.sendNotification(data, user.uuid);
     if (!data) {
       throw new NotFoundException("This Resturants doesn't exist");
     } else {
@@ -39,13 +48,17 @@ export class RestaurantController {
     }
   }
 
+
+  
   @Post('add')
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(SentryInterceptor)
   @ApiResponse({ status: 200, description: 'New restaurant Added' })
   @ApiBearerAuth('Authorization')
-  async addRestaurant(@Body(new ValidationPipe()) restaurant: RestaurantDto) {
+  async addRestaurant(@Body(new ValidationPipe()) restaurant: RestaurantDto, @AuthUser() user: any) {
     const data = await this.restaurantService.create(restaurant);
+    console.log(user)
+    await this.socketgateway.sendNotification(user.id, data);
     return data;
   }
 
@@ -88,4 +101,6 @@ export class RestaurantController {
     // return the updated restaurant
     return updatedRestaurant;
   }
+
+  
 }

@@ -34,7 +34,9 @@ export class RestaurantService {
   }
 
   async findAll(users): Promise<Restaurant[]> {
-    
+    console.log("start");
+    console.log(users);
+    console.log("end");
     return await this.restuarantRepository.findAll<Restaurant>(users);
   }
 
