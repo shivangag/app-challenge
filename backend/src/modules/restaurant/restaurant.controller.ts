@@ -37,10 +37,8 @@ export class RestaurantController {
   @UseInterceptors(SentryInterceptor)
   @ApiResponse({ status: 200, description: 'Get Restaurant List' })
   @ApiBearerAuth('Authorization')
-  async getRestaurants(@AuthUser() user: any) {
-    console.log(user.uuid);
+  async getRestaurants() {
     const data = await this.restaurantService.findAll({ include: User });
-    this.socketgateway.sendNotification(data, user.uuid);
     if (!data) {
       throw new NotFoundException("This Resturants doesn't exist");
     } else {
@@ -88,6 +86,7 @@ export class RestaurantController {
   async updateRestaurant(
     @Param('id') id: number,
     @Body(new ValidationPipe()) restaurant: editRestaurantDto,
+    @AuthUser() user: any
   ) {
     id.toString();
     // get the number of row affected and the updated restaurant
@@ -98,6 +97,7 @@ export class RestaurantController {
     if (numberOfAffectedRows === 0) {
       throw new NotFoundException("This Restaurant doesn't exist");
     }
+    await this.socketgateway.sendNotification(id, updatedRestaurant);
     // return the updated restaurant
     return updatedRestaurant;
   }
