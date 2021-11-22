@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RestaurantDto } from './dto/restaurant.dto';
 import { RestaurantService } from './restaurant.service';
 import { RestaurantController } from './restaurant.controller';
+import { SocketModule } from '../socket/socket.module';
 
 describe('RestaurantService', () => {
   let restaurantService: RestaurantService;
@@ -17,6 +18,7 @@ describe('RestaurantService', () => {
       }),
     };
     const module: TestingModule = await Test.createTestingModule({
+      imports:[SocketModule],
       providers: [RestaurantService, ApiServiceProvider],
       controllers: [RestaurantController],
     }).compile();
