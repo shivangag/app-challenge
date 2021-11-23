@@ -55,3 +55,13 @@ variable "database_name" {
   default     = "app_challenge_db"
   description = "database name"
 }
+
+variable "redis_host" {
+  default     = "app-challenge-redis.n7tg10.0001.euw1.cache.amazonaws.com"
+  description = "Redis Host"
+}
+
+variable "redis_port" {
+  default     = 6379
+  description = "Redis Port"
+}

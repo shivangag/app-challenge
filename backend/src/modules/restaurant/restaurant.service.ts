@@ -1,12 +1,16 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Restaurant } from './restaurant.entity';
 import { RESTAURANT_REPOSITORY } from '../../core/constants';
+import { SocketGateway } from '../socket/socket.gateway';
+import { SocketService } from '../socket/socket.service';
 
 @Injectable()
 export class RestaurantService {
   constructor(
     @Inject(RESTAURANT_REPOSITORY)
     private readonly restuarantRepository: typeof Restaurant,
+    private gateway: SocketGateway,
+    private cacheManager: SocketService
   ) {}
 
   async create(restaurant): Promise<Restaurant> {
