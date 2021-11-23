@@ -44,13 +44,17 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     //return { data: "Subscription Added" };
   }
 
-  async sendNotification(uuid, data) {
+  async sendNotification(userid, data, type) {
     this.logger.log("function called");
+    const payloadData = {
+      type:type,
+      data:data.dataValues
+    }
     for (let i = 0; i < this.connectedSockets.length; i++) {
       this.logger.log("in loop");
       const userID = await this.cacheManager.get(this.connectedSockets[i].clientId);
-      if (uuid !== userID) {
-        this.connectedSockets[i].client.emit('Notification', { payload: data.dataValues });
+      if (userid !== userID) {
+        this.connectedSockets[i].client.emit('Notification', { payload: payloadData });
       }
     }
     return 1;

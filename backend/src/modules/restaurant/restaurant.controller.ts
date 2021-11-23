@@ -55,7 +55,7 @@ export class RestaurantController {
   @ApiBearerAuth('Authorization')
   async addRestaurant(@Body(new ValidationPipe()) restaurant: RestaurantDto, @AuthUser() user: any) {
     const data = await this.restaurantService.create(restaurant);
-    await this.socketgateway.sendNotification(user.id, data);
+    await this.socketgateway.sendNotification(user.id, data, "create");
     return data;
   }
 
@@ -96,7 +96,7 @@ export class RestaurantController {
     if (numberOfAffectedRows === 0) {
       throw new NotFoundException("This Restaurant doesn't exist");
     }
-    await this.socketgateway.sendNotification(id, updatedRestaurant);
+    await this.socketgateway.sendNotification(id, updatedRestaurant, "update");
     // return the updated restaurant
     return updatedRestaurant;
   }
