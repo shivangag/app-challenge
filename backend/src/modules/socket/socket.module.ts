@@ -10,11 +10,11 @@ import { SocketGateway } from './socket.gateway';
     inject: [ConfigService],
     useFactory: async (configService: ConfigService) => ({
       store: redisStore,
-      host: configService.get('app-challenge-redis.n7tg10.0001.euw1.cache.amazonaws.com'),
-      port: configService.get('6379'),
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
     })
   })],
   providers: [SocketService, SocketGateway],
-  exports:[SocketService, SocketGateway]
+  exports: [SocketService, SocketGateway]
 })
 export class SocketModule { }
