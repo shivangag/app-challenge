@@ -20,15 +20,18 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
   async handleConnection(client: Socket, ...args: any[]) {
     client.emit('Notification', { data: "abcd" });
-    return { data: "abcd" };
+    // return { data: "abcd" };
   }
 
   afterInit(server: any) {
-    this.logger.log("started");
+    this.logger.log("started")
   }
 
-  handleDisconnect(client: Socket, ...args: any[]) {
-    this.logger.log(`Client connected: ${client.id}`);
+  async handleDisconnect(client: Socket, ...args: any[]) {
+    this.logger.log(`Client disconnected: ${client.id}`);
+    this.connectedSockets = this.connectedSockets.filter((socket) => socket.clientId !== client.id);
+    await this.cacheManager.del(client.id);
+    this.logger.log("Deleted disconnected User");
   }
 
 
@@ -38,7 +41,7 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     this.connectedSockets.push(clientDetails);
     await this.cacheManager.set(client.id, data.userId);
     client.emit('Notification', { data: "Subscription Added" });
-    return { data: "Subscription Added" };
+    //return { data: "Subscription Added" };
   }
 
   async sendNotification(uuid, data) {

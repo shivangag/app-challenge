@@ -5,8 +5,26 @@ import * as Sentry from '@sentry/node';
 
 import * as helmet from 'helmet';
 
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
+import * as winston from 'winston';
+import CloudWatchTransport from 'winston-cloudwatch';
+
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useLogger(
+    WinstonModule.createLogger({
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.ms(),
+        nestWinstonModuleUtilities.format.nestLike()
+      ),
+      transports: [new winston.transports.Console()]
+    })
+  );
 
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
