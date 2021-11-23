@@ -16,7 +16,7 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
   //public connectedSockets: { [key: string]: any[] } = {};
   public connectedSockets = [];
 
-  private logger: Logger = new Logger('AppGateway');
+  private logger: Logger = new Logger('SocketGateway');
 
   async handleConnection(client: Socket, ...args: any[]) {
     client.emit('Notification', { data: "abcd" });
@@ -37,13 +37,14 @@ export class SocketGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     const clientDetails = { clientId: client.id, client: client };
     this.connectedSockets.push(clientDetails);
     await this.cacheManager.set(client.id, data.userId);
-    this.sendNotification("abc", "def");
     client.emit('Notification', { data: "Subscription Added" });
     return { data: "Subscription Added" };
   }
 
   async sendNotification(uuid, data) {
+    this.logger.log("function called");
     for (let i = 0; i < this.connectedSockets.length; i++) {
+      this.logger.log("in loop");
       const userID = await this.cacheManager.get(this.connectedSockets[i].clientId);
       if (uuid !== userID) {
         this.connectedSockets[i].client.emit('Notification', { payload: data.dataValues });
