@@ -2,6 +2,8 @@ import { NextPage } from "next"
 import { useEffect, useState } from "react"
 import MaterialTable, { Column } from "material-table"
 import { Snackbar } from "@mui/material"
+import { analytics } from '../util/firebase'
+import { logEvent } from 'firebase/analytics'
 
 const Restaurants: NextPage = () => {
     const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -85,6 +87,7 @@ const Restaurants: NextPage = () => {
                 toaster({
                     message: 'Restaurant Created Successfully',
                 })
+                logEvent(analytics,'restaurant_created',_payload)
             })
             .catch(error => console.log(error));
         return status;
@@ -105,6 +108,7 @@ const Restaurants: NextPage = () => {
                 toaster({
                     message: 'Restaurant Updated Successfully',
                 })
+                logEvent(analytics,'restaurant_updated',_payload)
             })
             .catch(error => console.log(error));
         return status;
@@ -125,6 +129,7 @@ const Restaurants: NextPage = () => {
                 toaster({
                     message: 'Restaurant Deleted Successfully',
                 })
+                logEvent(analytics,'restaurant_deleted',_payload)
             })
             .catch(error => console.log(error));
         return status;

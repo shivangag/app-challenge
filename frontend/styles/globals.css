@@ -26,6 +26,12 @@ a {
   margin-top: 50px;
 }
 
+@media screen and (max-width: 600px) {
+  .main-body {
+    margin-left: 0px !important;
+  }
+}
+
 .input-text-box {
   padding: 7.5px 11px 7.5px;
   font-size: 15px;

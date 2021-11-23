@@ -1,7 +1,8 @@
 import type { NextPage } from 'next'
 import React, { useEffect, useState } from 'react'
 import Link from "next/link"
-
+import { analytics } from '../../util/firebase'
+import { logEvent } from 'firebase/analytics'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -66,6 +67,7 @@ const Header: NextPage = (props: any) => {
                         <ListItem button key={text} onClick={() => {
                             localStorage.setItem("accessToken", "")
                             setToken("")
+                            logEvent(analytics,'logout')
                             Router.push("/login")
                         }}>
                             <ListItemIcon>
