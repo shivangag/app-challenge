@@ -96,3 +96,47 @@ resource "aws_secretsmanager_secret_version" "jwt-secret" {
   secret_id     = "${aws_secretsmanager_secret.jwt-secret.id}"
   secret_string = "${var.jwt_secret}"
 }
+
+resource "aws_elasticache_subnet_group" "app-challenge-redis" {
+  name       = "app-challenge-redis"
+  subnet_ids = module.vpc.public_subnets
+
+  tags = {
+    Name = "app-challenge-redis"
+  }
+}
+
+resource "aws_security_group" "redis" {
+  name   = "app-challenge-redis"
+  vpc_id = module.vpc.vpc_id
+ 
+  ingress {
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "app-challenge-redis"
+  }
+}
+
+resource "aws_elasticache_cluster" "redis_cluster" {
+  cluster_id           = "${var.app_name}-redis"
+  engine               = "redis"
+  node_type            = "cache.t2.micro"
+  num_cache_nodes      = 1
+  parameter_group_name = "default.redis5.0"
+  engine_version       = "5.0.6"
+  port                 = 6379
+  security_group_ids   = [aws_security_group.redis.id]
+  subnet_group_name    = aws_elasticache_subnet_group.app-challenge-redis.name
+}

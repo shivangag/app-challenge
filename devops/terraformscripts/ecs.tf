@@ -126,6 +126,14 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
 				{
                     "value": "${var.database_name}",
                     "name": "DB_NAME_TEST"
+                },
+				{
+                    "value": "${var.redis_host}",
+                    "name": "REDIS_HOST"
+                },
+				{
+                    "value": "${var.redis_port}",
+                    "name": "REDIS_PORT"
                 }
             ],
 	"secrets": [
