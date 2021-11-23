@@ -32,7 +32,7 @@ module.exports = {
       },
       properties: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       status: {
         type: Sequelize.BOOLEAN,

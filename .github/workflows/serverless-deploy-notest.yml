@@ -1,4 +1,4 @@
-name: Serverless Deploy Workflow
+name: No test - Serverless Deploy 
 
 on:
   workflow_dispatch:
@@ -35,17 +35,7 @@ env:
   DB_PASS: ${{ secrets.DB_PASS }}
 
 jobs:
-  integration:
-    name: "Test"
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: "Checkout Code"
-        uses: "actions/checkout@v2"
-
-      - name: "install dependencies"
-        run: npm install
   deploy:
-    needs: integration
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
